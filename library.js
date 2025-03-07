@@ -113,6 +113,7 @@ function doIntersect(p1, q1, p2, q2) {
   return false;
 }
 
+
 /**
  * Check if a polygon is simple (no self-intersections).
  * @param {Array.<Array.<number>>} polygon - Array of [x, y] coordinates representing the polygon vertices.
@@ -150,6 +151,7 @@ function generateRandomSimplePolygon(numVertices) {
   } while (!isSimplePolygon(polygon));
   return polygon;
 }
+
 
 /**
  * Generate a random polygon with a specified number of vertices.
