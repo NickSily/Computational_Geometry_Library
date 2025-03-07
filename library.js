@@ -91,3 +91,77 @@ export function subtractPoints(p1, p2) {
   // Return p1 - p2
   return [p1[0] - p2[0], p1[1] - p2[1]];
 }
+
+/**
+ * Check if two line segments intersect.
+ * @param {Array.<number>} p1 - First point of the first segment.
+ * @param {Array.<number>} q1 - Second point of the first segment.
+ * @param {Array.<number>} p2 - First point of the second segment.
+ * @param {Array.<number>} q2 - Second point of the second segment.
+ * @returns {boolean} - True if the segments intersect, false otherwise.
+ */
+function doIntersect(p1, q1, p2, q2) {
+  const o1 = getOrientation(p1, q1, p2);
+  const o2 = getOrientation(p1, q1, q2);
+  const o3 = getOrientation(p2, q2, p1);
+  const o4 = getOrientation(p2, q2, q1);
+
+  if (o1 !== o2 && o3 !== o4) {
+    return true;
+  }
+
+  return false;
+}
+
+/**
+ * Check if a polygon is simple (no self-intersections).
+ * @param {Array.<Array.<number>>} polygon - Array of [x, y] coordinates representing the polygon vertices.
+ * @returns {boolean} - True if the polygon is simple, false otherwise.
+ */
+function isSimplePolygon(polygon) {
+  const n = polygon.length;
+  for (let i = 0; i < n; i++) {
+    for (let j = i + 2; j < n; j++) {
+      if (i === 0 && j === n - 1) continue;
+      if (
+        doIntersect(
+          polygon[i],
+          polygon[(i + 1) % n],
+          polygon[j],
+          polygon[(j + 1) % n]
+        )
+      ) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
+/**
+ * Generate a random simple polygon with a specified number of vertices.
+ * @param {number} numVertices - Number of vertices.
+ * @returns {Array.<Array.<number>>} - Array of [x, y] coordinates representing the polygon vertices.
+ */
+function generateRandomSimplePolygon(numVertices) {
+  let polygon;
+  do {
+    polygon = generateRandomPolygon(numVertices);
+  } while (!isSimplePolygon(polygon));
+  return polygon;
+}
+
+/**
+ * Generate a random polygon with a specified number of vertices.
+ * @param {number} numVertices - Number of vertices.
+ * @returns {Array.<Array.<number>>} - Array of [x, y] coordinates representing the polygon vertices.
+ */
+function generateRandomPolygon(numVertices) {
+  const points = [];
+  for (let i = 0; i < numVertices; i++) {
+    const x = Math.random() * 100;
+    const y = Math.random() * 100;
+    points.push([x, y]);
+  }
+  return points;
+}
